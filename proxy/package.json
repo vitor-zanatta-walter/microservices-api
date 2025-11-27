@@ -1,0 +1,26 @@
+{
+  "name": "proxy",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Proxy",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --no-deprecation app.js"
+  },
+  "author": "vitor zanatta walter",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "http-proxy": "^1.18.1",
+    "http-proxy-middleware": "^3.0.5",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.3",
+    "path": "^0.12.7",
+    "url": "^0.11.4"
+  }
+}

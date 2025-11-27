@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação da API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .base-url {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .auth-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .auth-section code {
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .service-section {
+            margin-bottom: 50px;
+        }
+
+        .service-section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .service-prefix {
+            background: #f1f3f5;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #495057;
+        }
+
+        .route-category {
+            margin-top: 30px;
+        }
+
+        .route-category h3 {
+            color: #495057;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .endpoint {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .method {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 15px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .method.get {
+            background: #d1f4e0;
+            color: #0f5132;
+        }
+
+        .method.post {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .method.put {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .method.delete {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .endpoint-info {
+            margin: 15px 0;
+        }
+
+        .endpoint-info p {
+            margin: 8px 0;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .auth-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .auth-badge.required {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .auth-badge.public {
+            background: #d1f4e0;
+            color: #0f5132;
+        }
+
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .json-key {
+            color: #e06c75;
+        }
+
+        .json-string {
+            color: #98c379;
+        }
+
+        .json-number {
+            color: #d19a66;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e9ecef;
+            margin: 30px 0;
+        }
+
+        .spacer {
+            height: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .method {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Documentação da API</h1>
+            <p>Sistema de Gerenciamento de Eventos (Via API Gateway)</p>
+            <div class="base-url">
+                <strong>Base URL:</strong> http://177.44.248.48
+            </div>
+        </header>
+
+        <div class="content">
+            <!-- Autenticação -->
+            <div class="auth-section">
+                <h2>🔐 Autenticação</h2>
+                <p>Quase todas rotas requerem um token JWT no header <code>Authorization</code>.</p>
+                <p><strong>Formato:</strong> <code>Authorization: Bearer &lt;token&gt;</code></p>
+            </div>
+
+            <!-- Login -->
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="route-path">/api/login</span>
+                </div>
+                <div class="endpoint-info">
+                    <p><span class="label">Descrição:</span> Valida credenciais (Login) e retorna Token JWT.</p>
+                    <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                    <p><span class="label">Request Body:</span></p>
+                    <pre>{
+  <span class="json-key">"email"</span>: <span class="json-string">"joao@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"senha_segura"</span>
+}</pre>
+                    <p><span class="label">Response (200 OK):</span></p>
+                    <pre>{
+  <span class="json-key">"access_token"</span>: <span class="json-string">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."</span>,
+  <span class="json-key">"token_type"</span>: <span class="json-string">"Bearer"</span>,
+  <span class="json-key">"expires_in"</span>: <span class="json-string">"1d"</span>
+}</pre>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <!-- 1. Serviço de Usuários -->
+            <div class="service-section">
+                <h2>1. Serviço de Usuários</h2>
+                <div class="service-prefix"><strong>Prefixo:</strong> /api/users</div>
+
+                <div class="route-category">
+                    <h3>Rotas Públicas</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/ping</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Verifica se o serviço está online.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                            <p><span class="label">Response (200 OK):</span></p>
+                            <pre>pong</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Cria um novo usuário (Cadastro).</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                            <p><span class="label">Request Body:</span></p>
+                            <pre>{
+  <span class="json-key">"name"</span>: <span class="json-string">"João Silva"</span>,
+  <span class="json-key">"cpf"</span>: <span class="json-string">"123.456.789-00"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"joao@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"senha_segura"</span>
+}</pre>
+                            <p><span class="label">Response (201 Created):</span></p>
+                            <pre>{
+  <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"João Silva"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"joao@example.com"</span>,
+  <span class="json-key">"is_attendant"</span>: <span class="json-number">0</span>
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/internal/create_attendant</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Rota de desenvolvimento para criar um atendente.
+                            </p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                            <p><span class="label">Request Body:</span></p>
+                            <pre>{
+  <span class="json-key">"name"</span>: <span class="json-string">"Admin"</span>,
+  <span class="json-key">"cpf"</span>: <span class="json-string">"000.000.000-00"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"admin@example.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"admin"</span>
+}</pre>
+                            <p><span class="label">Response (201 Created):</span></p>
+                            <pre>{
+  <span class="json-key">"id"</span>: <span class="json-number">2</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"Admin"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"admin@example.com"</span>,
+  <span class="json-key">"is_attendant"</span>: <span class="json-number">1</span>
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-category">
+                    <h3>Rotas Protegidas (Requer Token)</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/me</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Retorna os dados do usuário autenticado.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                            <p><span class="label">Response (200 OK):</span></p>
+                            <pre>{
+  <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"João Silva"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"joao@example.com"</span>,
+  <span class="json-key">"is_attendant"</span>: <span class="json-number">0</span>
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/email/:email</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Busca usuário por email (Apenas atendentes).</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/promote/:user_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Promove um usuário a atendente.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                            <p><span class="label">Response:</span> 204 No Content</p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/demote/:user_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Remove privilégios de atendente.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                            <p><span class="label">Response:</span> 204 No Content</p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method put">PUT</span>
+                            <span class="route-path">/:user_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Atualiza dados do usuário.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method delete">DELETE</span>
+                            <span class="route-path">/:user_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Deleta um usuário.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                            <p><span class="label">Response:</span> 204 No Content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <!-- 2. Serviço de Inscrições -->
+            <div class="service-section">
+                <h2>2. Serviço de Inscrições</h2>
+                <div class="service-prefix"><strong>Prefixo:</strong> /api/enrollments</div>
+
+                <div class="route-category">
+                    <h3>Rotas Protegidas</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Cria uma nova inscrição.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                            <p><span class="label">Request Body:</span></p>
+                            <pre>{
+  <span class="json-key">"user_id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"event_id"</span>: <span class="json-number">10</span>,
+  <span class="json-key">"source"</span>: <span class="json-string">"web"</span>
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/me</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Busca todas as inscrições do usuário autenticado.
+                            </p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/events/:event_id/users/:user_id/presence</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Confirma presença (Check-in).</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method delete">DELETE</span>
+                            <span class="route-path">/events/:event_id/users/:user_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Cancela uma inscrição.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <!-- 3. Serviço de Eventos -->
+            <div class="service-section">
+                <h2>3. Serviço de Eventos</h2>
+                <div class="service-prefix"><strong>Prefixo:</strong> /api/events</div>
+
+                <div class="route-category">
+                    <h3>Rotas Públicas</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Lista todos os eventos disponíveis.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/:event_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Busca detalhes de um evento por ID.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-category">
+                    <h3>Rotas Protegidas (Apenas Atendentes)</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Cria um novo evento.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method put">PUT</span>
+                            <span class="route-path">/:event_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Atualiza um evento existente.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method delete">DELETE</span>
+                            <span class="route-path">/:event_id</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Deleta um evento.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                            <p><span class="label">Response:</span> 204 No Content</p>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/:event_id/finish</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Finaliza um evento e gera certificados.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <!-- 4. Serviço de Certificados -->
+            <div class="service-section">
+                <h2>4. Serviço de Certificados</h2>
+                <div class="service-prefix"><strong>Prefixo:</strong> /api/certificates</div>
+
+                <div class="route-category">
+                    <h3>Rotas Públicas</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/verify/:hash</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Verifica a autenticidade de um certificado pelo
+                                Hash.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-category">
+                    <h3>Rotas Protegidas</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="route-path">/me</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Retorna todos os certificados do usuário
+                                autenticado.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
