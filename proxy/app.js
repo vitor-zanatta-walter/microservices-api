@@ -9,8 +9,10 @@ dotenv.config();
 
 import loginRouter from "./login.js";
 import createProxyAuthMiddleware from "./middleware/authMiddleware.js";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 
 // instanciar o middleware de autenticação
 const authMiddleware = createProxyAuthMiddleware();
@@ -47,27 +49,27 @@ const pathRewrite = (path, from) => {
 
 // carregar as regras de encaminhamento
 const rules = Object.keys(process.env)
-.filter((key) => key.startsWith("RULE_"))
-.map((key) => {
-    const line = process.env[key];
-    const rule = line.split("->");
-    const from = rule[0].trim();
-    const to = rule[1].trim();
+    .filter((key) => key.startsWith("RULE_"))
+    .map((key) => {
+        const line = process.env[key];
+        const rule = line.split("->");
+        const from = rule[0].trim();
+        const to = rule[1].trim();
 
-    // cria o proxy e injeta header x-proxy-user se req.proxyToken existir
-    const proxy = createProxyMiddleware({
-        target: to,
-        changeOrigin: true,
-        pathRewrite: (path) => pathRewrite(path, from),
-        onProxyReq(proxyReq, req) {
-            if (req && req.proxyToken) {
-                proxyReq.setHeader('Authorization', `Bearer ${req.proxyToken}`);
+        // cria o proxy e injeta header x-proxy-user se req.proxyToken existir
+        const proxy = createProxyMiddleware({
+            target: to,
+            changeOrigin: true,
+            pathRewrite: (path) => pathRewrite(path, from),
+            onProxyReq(proxyReq, req) {
+                if (req && req.proxyToken) {
+                    proxyReq.setHeader('Authorization', `Bearer ${req.proxyToken}`);
+                }
             }
-        }
-    });
+        });
 
-    return { from, to, proxy };
-})
+        return { from, to, proxy };
+    })
 
 app.use(auditMiddleware());
 
@@ -90,7 +92,7 @@ app.use((req, res, next) => {
             console.log(`[Proxy] ${req.method} ${req.url} -> ${rule.to + path}`);
 
             // authMiddleware
-            return authMiddleware(req, res, (err) => {    
+            return authMiddleware(req, res, (err) => {
                 if (err) return next(err);
                 return rule.proxy(req, res, next);
             });

@@ -10,7 +10,8 @@ export default function createProxyAuthMiddleware({
     { method: 'POST', path: '/api/login' },
     { method: 'POST', path: '/api/users' },
     { method: 'GET', path: '/api/users/ping' },
-    { method: 'POST', path: '/api/users/internal/create_attendant' }
+    { method: 'POST', path: '/api/users/internal/create_attendant' },
+    { method: 'GET', path: '/api/certificates/*' }
   ],
 
   proxyTTLSeconds = 120

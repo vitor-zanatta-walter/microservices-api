@@ -1,11 +1,9 @@
 # Aplicação principal Flask
-from flask import Flask, jsonify, g
-from app.config import APP_NAME, APP_VERSION
-from app.database import close_db
-from app.api.routes.events import bp as events_bp
-from app.api.routes.certificates import bp as certificates_bp
-from app.auth.jwt_utils import extract_token_from_header, decode_jwt_token
+from flask import Flask, jsonify, g, request
 from werkzeug.exceptions import HTTPException
+from app.config import APP_NAME, APP_VERSION
+from app.api.router import bp as api_bp
+from app.auth.jwt_utils import extract_token_from_header, decode_jwt_token
 
 from flask_cors import CORS
 
@@ -13,12 +11,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Configurar teardown do banco de dados
-app.teardown_appcontext(close_db)
-
 # Registrar Blueprints
-app.register_blueprint(events_bp)
-app.register_blueprint(certificates_bp)
+app.register_blueprint(api_bp)
 
 # Middleware de Autenticação (before_request)
 @app.before_request
@@ -32,7 +26,6 @@ def authenticate_request():
     if request.endpoint in public_endpoints:
         return
 
-    # Tentar extrair e validar token
     # Tentar extrair e validar token
     auth_header = request.headers.get("Authorization")
     if auth_header:
@@ -79,7 +72,3 @@ def health_check():
         "app": APP_NAME,
         "version": APP_VERSION
     })
-
-# Import request aqui para evitar circularidade no topo se necessário,
-# mas flask.request é global proxy, então ok importar no topo.
-from flask import request
