@@ -14,16 +14,29 @@ import cors from "cors";
 const app = express();
 app.use(cors());
 
-// instanciar o middleware de autenticação
-const authMiddleware = createProxyAuthMiddleware();
-
 // carregar variáveis de ambiente 
-const BLOCKED_PATHS = process.env.BLOCKED_PATHS ? process.env.BLOCKED_PATHS.split(",") : [];
+const BLOCKED_PATHS = Object.keys(process.env)
+    .filter(key => key.startsWith("BLOCKED_PATH_"))
+    .map(key => process.env[key].trim());
+
 const LISTEN_PORT = process.env.LISTEN_PORT;
 const USE_HTTPS = (process.env.USE_HTTPS === "true");
 const HTTPS_KEY = process.env.HTTPS_KEY;
 const HTTPS_CERT = process.env.HTTPS_CERT;
 const KEEP_PATH = (process.env.KEEP_PATH === "true");
+
+// parse public routes
+const PUBLIC_ROUTES = Object.keys(process.env)
+    .filter(key => key.startsWith("PUBLIC_ROUTE_"))
+    .map(key => {
+        const [method, path] = process.env[key].split(':');
+        return { method: method.trim(), path: path.trim() };
+    });
+
+// instanciar o middleware de autenticação
+const authMiddleware = createProxyAuthMiddleware({
+    publicPaths: PUBLIC_ROUTES
+});
 
 // configuração do certificado
 const options = {};

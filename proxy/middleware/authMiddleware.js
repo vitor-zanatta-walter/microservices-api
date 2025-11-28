@@ -5,14 +5,8 @@ import jwt from 'jsonwebtoken';
 export default function createProxyAuthMiddleware({
   proxyPrivateKeyPath = './keys/private.pem',
   proxyPublicKeyPath = './keys/public.pem',
-  
-  publicPaths = [
-    { method: 'POST', path: '/api/login' },
-    { method: 'POST', path: '/api/users' },
-    { method: 'GET', path: '/api/users/ping' },
-    { method: 'POST', path: '/api/users/internal/create_attendant' },
-    { method: 'GET', path: '/api/certificates/*' }
-  ],
+
+  publicPaths = [],
 
   proxyTTLSeconds = 120
 } = {}) {
@@ -20,7 +14,13 @@ export default function createProxyAuthMiddleware({
   const proxyPrivate = fs.readFileSync(path.resolve(proxyPrivateKeyPath), 'utf8');
   const proxyPublic = fs.readFileSync(path.resolve(proxyPublicKeyPath), 'utf8');
 
-  const isPublic = (req) => publicPaths.some(p => p.method.toUpperCase() === req.method.toUpperCase() && p.path === req.path);
+  const isPublic = (req) => publicPaths.some(p => {
+    if (p.method.toUpperCase() !== req.method.toUpperCase()) return false;
+    if (p.path.endsWith('*')) {
+      return req.path.startsWith(p.path.slice(0, -1));
+    }
+    return p.path === req.path;
+  });
 
   const verifyClientToken = (token) => jwt.verify(token, proxyPublic, { algorithms: ['RS256'] });
 
