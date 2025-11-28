@@ -1,11 +1,11 @@
 """Script para executar a aplicação"""
 
 from app.main import app
-from app.config import HOST, PORT, DEBUG
+from app.config import Config
 
 if __name__ == "__main__":
     app.run(
-        host=HOST,
-        port=PORT,
-        debug=DEBUG
+        host=Config.HOST,
+        port=Config.PORT,
+        debug=Config.DEBUG
     )

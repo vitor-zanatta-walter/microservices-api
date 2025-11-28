@@ -1,7 +1,7 @@
 # Aplicação principal Flask
 from flask import Flask, jsonify, g, request
 from werkzeug.exceptions import HTTPException
-from app.config import APP_NAME, APP_VERSION
+from app.config import Config
 from app.api.router import bp as api_bp
 from app.auth.jwt_utils import extract_token_from_header, decode_jwt_token
 
@@ -55,8 +55,8 @@ def handle_exception(e):
 def root():
     # Endpoint raiz da API
     return jsonify({
-        "message": f"Bem-vindo à {APP_NAME}",
-        "version": APP_VERSION
+        "message": f"Bem-vindo à {Config.APP_NAME}",
+        "version": Config.APP_VERSION
     })
 
 @app.route("/ping", methods=["GET"])
@@ -69,6 +69,6 @@ def health_check():
     # Endpoint de health check
     return jsonify({
         "status": "healthy",
-        "app": APP_NAME,
-        "version": APP_VERSION
+        "app": Config.APP_NAME,
+        "version": Config.APP_VERSION
     })

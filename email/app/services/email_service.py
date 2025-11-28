@@ -1,35 +1,44 @@
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from app.config import MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_DEFAULT_SENDER
+"""
+Email Service using Gmail API
+"""
+from app.services.gmail_client import GmailClient
+from app.config import Config
+
 
 class EmailService:
-    @staticmethod
-    def send_email(to_email, subject, body, is_html=False):
+    """Service for sending emails via Gmail API"""
+    
+    def __init__(self):
+        """Initialize Gmail API client"""
+        self.client = GmailClient(
+            credentials_file=Config.GMAIL_CREDENTIALS_FILE,
+            token_file=Config.GMAIL_TOKEN_FILE
+        )
+    
+    def send_email(self, to, subject, body):
         """
-        Envia um email usando Gmail SMTP
+        Send plain text email
+        
+        Args:
+            to: Recipient email address (string or list)
+            subject: Email subject
+            body: Email body (plain text)
+        
+        Returns:
+            Message ID if successful
         """
-        if not MAIL_USERNAME or not MAIL_PASSWORD:
-            raise ValueError("Credenciais de email não configuradas")
-
-        msg = MIMEMultipart()
-        msg['From'] = MAIL_DEFAULT_SENDER
-        msg['To'] = to_email
-        msg['Subject'] = subject
-
-        if is_html:
-            msg.attach(MIMEText(body, 'html'))
-        else:
-            msg.attach(MIMEText(body, 'plain'))
-
-        try:
-            server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
-            server.starttls()
-            server.login(MAIL_USERNAME, MAIL_PASSWORD)
-            text = msg.as_string()
-            server.sendmail(MAIL_DEFAULT_SENDER, to_email, text)
-            server.quit()
-            return True
-        except Exception as e:
-            print(f"Erro ao enviar email: {e}")
-            raise e
+        return self.client.send_email(to, subject, body, html=False)
+    
+    def send_html_email(self, to, subject, html_body):
+        """
+        Send HTML email
+        
+        Args:
+            to: Recipient email address (string or list)
+            subject: Email subject
+            html_body: Email body (HTML)
+        
+        Returns:
+            Message ID if successful
+        """
+        return self.client.send_email(to, subject, html_body, html=True)
