@@ -495,6 +495,35 @@
                     <div class="endpoint">
                         <div class="endpoint-header">
                             <span class="method post">POST</span>
+                            <span class="route-path">/events/:event_id/sync</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Sincroniza dados de presença offline (Cria usuários
+                                e inscrições se necessário).</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                            <p><span class="label">Request Body:</span></p>
+                            <pre>{
+  <span class="json-key">"users"</span>: [
+    {
+      <span class="json-key">"name"</span>: <span class="json-string">"Fulano"</span>,
+      <span class="json-key">"email"</span>: <span class="json-string">"fulano@teste.com"</span>,
+      <span class="json-key">"checkin_time"</span>: <span class="json-string">"2023-10-27T10:00:00Z"</span>
+    }
+  ]
+}</pre>
+                            <p><span class="label">Response (200 OK):</span></p>
+                            <pre>{
+  <span class="json-key">"message"</span>: <span class="json-string">"Sincronização concluída"</span>,
+  <span class="json-key">"processed"</span>: [ ... ],
+  <span class="json-key">"created_accounts"</span>: [ ... ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
                             <span class="route-path">/events/:event_id/users/:user_id/presence</span>
                         </div>
                         <div class="endpoint-info">
@@ -520,7 +549,6 @@
 
             <div class="spacer"></div>
 
-            <!-- 3. Serviço de Eventos -->
             <div class="service-section">
                 <h2>3. Serviço de Eventos</h2>
                 <div class="service-prefix"><strong>Prefixo:</strong> /api/events</div>
@@ -535,7 +563,8 @@
                         </div>
                         <div class="endpoint-info">
                             <p><span class="label">Descrição:</span> Lista todos os eventos disponíveis.</p>
-                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span>
+                            </p>
                         </div>
                     </div>
 
@@ -546,7 +575,8 @@
                         </div>
                         <div class="endpoint-info">
                             <p><span class="label">Descrição:</span> Busca detalhes de um evento por ID.</p>
-                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -623,7 +653,8 @@
                         <div class="endpoint-info">
                             <p><span class="label">Descrição:</span> Verifica a autenticidade de um certificado pelo
                                 Hash.</p>
-                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span></p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge public">Não requer</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -639,7 +670,8 @@
                         <div class="endpoint-info">
                             <p><span class="label">Descrição:</span> Retorna todos os certificados do usuário
                                 autenticado.</p>
-                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token</span>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer
+                                    Token</span>
                             </p>
                         </div>
                     </div>

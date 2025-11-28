@@ -1,11 +1,15 @@
 import express from 'express';
 import enrollmentsController from '../controllers/enrollmentsController.js';
+import SyncController from '../controllers/syncController.js';
 
 const router = express.Router();
 
 
 // Inserir uma nova inscrição
 router.post('/', enrollmentsController.create);
+
+// Sincronizar dados offline (presença e inscrições)
+router.post('/events/:event_id/sync', SyncController.sync);
 
 // Buscar inscrições do usuário logado
 router.get('/me', enrollmentsController.getMyEnrollments);
