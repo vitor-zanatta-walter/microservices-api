@@ -23,8 +23,12 @@ def send_email():
         return jsonify({"error": "Campos obrigatórios: to, subject, body"}), 400
         
     try:
-        EmailService.send_email(to_email, subject, body, is_html=False)
-        return jsonify({"message": "Email enviado com sucesso"}), 200
+        email_service = EmailService()
+        message_id = email_service.send_email(to_email, subject, body)
+        return jsonify({
+            "message": "Email enviado com sucesso",
+            "message_id": message_id
+        }), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -41,13 +45,17 @@ def send_email_html():
         
     to_email = data.get("to")
     subject = data.get("subject")
-    body = data.get("body")
+    html_body = data.get("html_body") or data.get("body")
     
-    if not all([to_email, subject, body]):
-        return jsonify({"error": "Campos obrigatórios: to, subject, body"}), 400
+    if not all([to_email, subject, html_body]):
+        return jsonify({"error": "Campos obrigatórios: to, subject, html_body (ou body)"}), 400
         
     try:
-        EmailService.send_email(to_email, subject, body, is_html=True)
-        return jsonify({"message": "Email HTML enviado com sucesso"}), 200
+        email_service = EmailService()
+        message_id = email_service.send_html_email(to_email, subject, html_body)
+        return jsonify({
+            "message": "Email HTML enviado com sucesso",
+            "message_id": message_id
+        }), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
