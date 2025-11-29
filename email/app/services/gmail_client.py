@@ -11,6 +11,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import re
 
 # Gmail API scopes
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
@@ -88,7 +89,9 @@ class GmailClient:
             
             # Add body for HTML emails
             if html:
-                text_part = MIMEText(body, 'plain')
+                # Strip HTML tags for plain text version
+                plain_text = re.sub('<[^<]+?>', '', body)
+                text_part = MIMEText(plain_text, 'plain')
                 html_part = MIMEText(body, 'html')
                 message.attach(text_part)
                 message.attach(html_part)
