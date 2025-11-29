@@ -53,7 +53,7 @@ class SyncController {
 
                         // Validar resposta do serviço de usuários
                         if (!createdUser || !createdUser.id) {
-                            throw new Error('Falha ao criar usuário: resposta inválida do serviço');
+                            throw new Error(`Falha ao criar usuário: resposta inválida. Recebido: ${JSON.stringify(createdUser)}`);
                         }
 
                         userId = createdUser.id;
