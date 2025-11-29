@@ -67,7 +67,7 @@ class SyncController {
                         });
 
                         // 7. Enviar email de boas-vindas com credenciais
-                        await sendWelcomeEmail(email, name, randomPassword, event.name, token);
+                        await sendWelcomeEmail(email, name, randomPassword, event.title, token);
                     } else {
                         userId = user.id;
                     }
