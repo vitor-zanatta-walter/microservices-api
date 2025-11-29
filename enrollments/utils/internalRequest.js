@@ -116,7 +116,7 @@ export async function sendWelcomeEmail(userEmail, userName, password, eventName,
             <p>Atenciosamente,<br>Equipe de Eventos</p>
         `;
 
-        const response = await fetch(`${serviceUrl}/api/email/send-html`, {
+        const response = await fetch(`${serviceUrl}/send-html`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
