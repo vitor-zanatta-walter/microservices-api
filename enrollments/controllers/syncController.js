@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import Enrollment from '../models/Enrollment.js';
-import { getEvent, getUserByEmail, createUser } from '../utils/internalRequest.js';
+import { getEvent, getUserByEmail, createUser, sendWelcomeEmail } from '../utils/internalRequest.js';
 
 class SyncController {
 
@@ -32,6 +32,7 @@ class SyncController {
             for (const userData of users) {
                 const { name, email, checkin_time } = userData;
                 let userId = null;
+                let userCreated = false;
 
                 try {
                     // 2. Verificar se usuário existe
@@ -40,6 +41,7 @@ class SyncController {
                     if (!user) {
                         // 3. Criar usuário se não existir
                         const randomPassword = crypto.randomBytes(8).toString('hex');
+
                         const newUser = {
                             name,
                             email,
@@ -48,14 +50,24 @@ class SyncController {
                         };
 
                         const createdUser = await createUser(newUser);
-                        userId = createdUser.id; // Assuming createUser returns { id, ... } or similar
 
-                        // Guardar credenciais para envio de email posterior
+                        // Validar resposta do serviço de usuários
+                        if (!createdUser || !createdUser.id) {
+                            throw new Error('Falha ao criar usuário: resposta inválida do serviço');
+                        }
+
+                        userId = createdUser.id;
+                        userCreated = true;
+
+                        // Guardar credenciais para envio de email
                         createdAccounts.push({
                             name,
                             email,
                             password: randomPassword
                         });
+
+                        // 7. Enviar email de boas-vindas com credenciais
+                        await sendWelcomeEmail(email, name, randomPassword, event.name, token);
                     } else {
                         userId = user.id;
                     }
@@ -78,7 +90,12 @@ class SyncController {
                         checkin_time: checkin_time || new Date()
                     });
 
-                    processedUsers.push({ email, status: 'synced' });
+                    processedUsers.push({
+                        email,
+                        status: 'synced',
+                        user_created: userCreated,
+                        email_sent: userCreated
+                    });
 
                 } catch (err) {
                     console.error(`Erro ao processar usuário ${email}:`, err);
@@ -89,7 +106,8 @@ class SyncController {
             res.json({
                 message: 'Sincronização concluída',
                 processed: processedUsers,
-                created_accounts: createdAccounts // Retornando para uso posterior (email service)
+                created_accounts: createdAccounts.length,
+                emails_sent: createdAccounts.length
             });
 
         } catch (error) {

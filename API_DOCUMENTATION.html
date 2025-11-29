@@ -671,8 +671,64 @@
                             <p><span class="label">Descrição:</span> Retorna todos os certificados do usuário
                                 autenticado.</p>
                             <p><span class="label">Auth:</span> <span class="auth-badge required">Requer
-                                    Token</span>
-                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <!-- 5. Serviço de Email -->
+            <div class="service-section">
+                <h2>5. Serviço de Email</h2>
+                <div class="service-prefix"><strong>Prefixo:</strong> /api/email</div>
+
+                <div class="route-category">
+                    <h3>Rotas Protegidas (Apenas Atendentes)</h3>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/send</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Envia um email de texto simples via Gmail API.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                            <p><span class="label">Request Body:</span></p>
+                            <pre>{
+  <span class="json-key">"to"</span>: <span class="json-string">"destinatario@example.com"</span>,
+  <span class="json-key">"subject"</span>: <span class="json-string">"Assunto do Email"</span>,
+  <span class="json-key">"body"</span>: <span class="json-string">"Conteúdo do email em texto simples"</span>
+}</pre>
+                            <p><span class="label">Response (200 OK):</span></p>
+                            <pre>{
+  <span class="json-key">"message"</span>: <span class="json-string">"Email enviado com sucesso"</span>,
+  <span class="json-key">"message_id"</span>: <span class="json-string">"18d4f5e6a7b8c9d0"</span>
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="route-path">/send-html</span>
+                        </div>
+                        <div class="endpoint-info">
+                            <p><span class="label">Descrição:</span> Envia um email em formato HTML via Gmail API.</p>
+                            <p><span class="label">Auth:</span> <span class="auth-badge required">Requer Token
+                                    (Atendente)</span></p>
+                            <p><span class="label">Request Body:</span></p>
+                            <pre>{
+  <span class="json-key">"to"</span>: <span class="json-string">"destinatario@example.com"</span>,
+  <span class="json-key">"subject"</span>: <span class="json-string">"Assunto do Email"</span>,
+  <span class="json-key">"html_body"</span>: <span class="json-string">"&lt;h1&gt;Título&lt;/h1&gt;&lt;p&gt;Conteúdo em HTML&lt;/p&gt;"</span>
+}</pre>
+                            <p><span class="label">Response (200 OK):</span></p>
+                            <pre>{
+  <span class="json-key">"message"</span>: <span class="json-string">"Email HTML enviado com sucesso"</span>,
+  <span class="json-key">"message_id"</span>: <span class="json-string">"18d4f5e6a7b8c9d0"</span>
+}</pre>
                         </div>
                     </div>
                 </div>

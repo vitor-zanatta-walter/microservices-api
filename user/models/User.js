@@ -8,7 +8,7 @@ import updateQueryGenerator from '../util/updateQueryGenerator.js';
 
 export default class User {
 
-    constructor( {id, name, email, password_hash, cpf, is_attendant} ) {
+    constructor({ id, name, email, password_hash, cpf, is_attendant }) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -18,11 +18,11 @@ export default class User {
     }
 
     // criar usuário
-    static async create( {name, email, password_hash, cpf, is_attendant} ) {
+    static async create({ name, email, password_hash, cpf, is_attendant }) {
         const db = DatabaseFactory.getInstance();
 
-        if (!name || !email || !password_hash || !cpf) {
-            throw new ValidationError('name, email, password e CPF são obrigatórios para o create');
+        if (!name || !email || !password_hash) {
+            throw new ValidationError('name, email e password são obrigatórios para o create');
         }
 
         const query = `
@@ -31,19 +31,20 @@ export default class User {
         `;
 
         if (!is_attendant) is_attendant = 0;
+        if (!cpf) cpf = null;
 
         const params = [name, email, password_hash, cpf, is_attendant];
 
         try {
             const result = await db.execute(query, params);
-            return new User( {id: result.insertId, ...params} );
+            return new User({ id: result.insertId, ...params });
         } catch (err) {
             throw new DatabaseError('Erro ao criar usuário', err);
         }
     }
 
     // atualizar usuário
-    static async update(id, {name, email, password_hash, cpf, is_attendant}) {
+    static async update(id, { name, email, password_hash, cpf, is_attendant }) {
         const db = DatabaseFactory.getInstance();
 
         if (!id) throw new ValidationError('ID é obrigatório para o update');
@@ -54,7 +55,7 @@ export default class User {
         const where = "Users.id = ?";
         const whereParams = [id];
 
-        const {query, params} = updateQueryGenerator(table, items, names, where, whereParams);
+        const { query, params } = updateQueryGenerator(table, items, names, where, whereParams);
 
         try {
             const result = await db.execute(query, params);
@@ -79,7 +80,7 @@ export default class User {
     // buscar usuário pelo email
     static async getByEmail(email) {
         const db = DatabaseFactory.getInstance();
-        
+
         try {
             const query = "SELECT * FROM Users WHERE Users.email = ?";
             const result = await db.execute(query, [email]);
@@ -92,7 +93,7 @@ export default class User {
     // buscar usuário pelo ID
     static async get(id) {
         const db = DatabaseFactory.getInstance();
-        
+
         try {
             const query = "SELECT * FROM Users WHERE Users.id = ?";
             const result = await db.execute(query, [id]);
