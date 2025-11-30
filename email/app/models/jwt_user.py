@@ -1,6 +1,3 @@
-# app/models/jwt_user.py
-"""Simple dataclass representing the JWT payload after validation."""
-
 from dataclasses import dataclass
 
 @dataclass

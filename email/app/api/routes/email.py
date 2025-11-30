@@ -7,10 +7,9 @@ bp = Blueprint("email", __name__)
 @bp.route("/send", methods=["POST"])
 @require_attendant
 def send_email():
-    """
-    Envia um email simples (texto).
-    Requer autenticação e privilégios de atendente.
-    """
+    # Envia um email simples (texto).
+    # Requer autenticação e privilégios de atendente.
+    
     data = request.get_json()
     if not data:
         return jsonify({"error": "Dados inválidos"}), 400
@@ -35,10 +34,9 @@ def send_email():
 @bp.route("/send-html", methods=["POST"])
 @require_attendant
 def send_email_html():
-    """
-    Envia um email HTML.
-    Requer autenticação e privilégios de atendente.
-    """
+    # Envia um email HTML.
+    # Requer autenticação e privilégios de atendente.
+    
     data = request.get_json()
     if not data:
         return jsonify({"error": "Dados inválidos"}), 400

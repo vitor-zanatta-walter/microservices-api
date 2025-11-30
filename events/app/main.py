@@ -41,7 +41,6 @@ def authenticate_request():
         return
 
     # Tentar extrair e validar token
-    # Tentar extrair e validar token
     auth_header = request.headers.get("Authorization")
     if auth_header:
         try:

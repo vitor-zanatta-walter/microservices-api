@@ -6,7 +6,7 @@ load_dotenv()
 
 
 class Config:
-    """Application configuration"""
+    # Application configuration
     
     # Application
     APP_NAME = os.getenv("APP_NAME", "Email Service")

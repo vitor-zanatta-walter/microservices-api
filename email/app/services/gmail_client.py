@@ -1,7 +1,6 @@
-"""
-Gmail API Client Wrapper
-Handles OAuth2 authentication and email sending via Gmail API
-"""
+# Gmail API Client Wrapper
+# Handles OAuth2 authentication and email sending via Gmail API
+
 import os
 import base64
 from email.mime.text import MIMEText
@@ -18,23 +17,23 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 
 class GmailClient:
-    """Gmail API client for sending emails"""
+    # Gmail API client for sending emails
     
     def __init__(self, credentials_file, token_file):
-        """
-        Initialize Gmail client
+        # Initialize Gmail client
         
-        Args:
-            credentials_file: Path to OAuth2 credentials JSON file
-            token_file: Path to store/load refresh token
-        """
+        # Args:
+        #     credentials_file: Path to OAuth2 credentials JSON file
+        #     token_file: Path to store/load refresh token
+        
         self.credentials_file = credentials_file
         self.token_file = token_file
         self.service = None
         self._authenticate()
     
     def _authenticate(self):
-        """Authenticate with Gmail API using OAuth2"""
+        # Authenticate with Gmail API using OAuth2
+        
         creds = None
         
         # Load existing token if available
@@ -60,22 +59,22 @@ class GmailClient:
         # Build Gmail service
         self.service = build('gmail', 'v1', credentials=creds)
     
+
     def send_email(self, to, subject, body, html=False):
-        """
-        Send email via Gmail API
+        # Send email via Gmail API
         
-        Args:
-            to: Recipient email address (string or list)
-            subject: Email subject
-            body: Email body content
-            html: Whether body is HTML (default: False)
+        # Args:
+        #     to: Recipient email address (string or list)
+        #     subject: Email subject
+        #     body: Email body content
+        #     html: Whether body is HTML (default: False)
         
-        Returns:
-            Message ID if successful
+        # Returns:
+        #     Message ID if successful
         
-        Raises:
-            HttpError: If Gmail API request fails
-        """
+        # Raises:
+        #     HttpError: If Gmail API request fails
+        
         try:
             # Create message
             message = MIMEMultipart('alternative') if html else MIMEText(body)

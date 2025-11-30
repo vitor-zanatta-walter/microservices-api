@@ -61,7 +61,7 @@ def get_current_user() -> JWTUser:
 
 
 def require_attendant(f):
-    """Decorator to require attendant privileges."""
+    # Decorator to require attendant privileges
     from functools import wraps
     @wraps(f)
     def decorated_function(*args, **kwargs):
