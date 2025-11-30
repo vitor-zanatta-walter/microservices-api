@@ -18,10 +18,7 @@ export default function createProxyAuthMiddleware({
     // Extract pathname from req.url (remove query string)
     const pathname = req.url.split('?')[0];
 
-    console.log(`[AUTH DEBUG] Method: ${req.method}, Pathname: ${pathname}`);
-    console.log(`[AUTH DEBUG] Public paths:`, publicPaths);
-
-    const result = publicPaths.some(p => {
+    return publicPaths.some(p => {
       if (p.method.toUpperCase() !== req.method.toUpperCase()) return false;
 
       if (p.path.endsWith('*')) {
@@ -33,9 +30,6 @@ export default function createProxyAuthMiddleware({
 
       return p.path === pathname;
     });
-
-    console.log(`[AUTH DEBUG] Is public? ${result}`);
-    return result;
   };
 
   const verifyClientToken = (token) => jwt.verify(token, proxyPublic, { algorithms: ['RS256'] });
@@ -52,6 +46,13 @@ export default function createProxyAuthMiddleware({
 
   return function proxyAuthMiddleware(req, res, next) {
 
+    // Skip authentication for non-API routes (frontend routes)
+    if (!req.url.startsWith('/api')) {
+      console.log(`[AUTH] Skipping auth for frontend route: ${req.url}`);
+      return next();
+    }
+
+    // Check if API route is public
     if (isPublic(req)) return next();
 
     const auth = req.headers.authorization || '';
