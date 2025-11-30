@@ -14,13 +14,18 @@ export default function createProxyAuthMiddleware({
   const proxyPrivate = fs.readFileSync(path.resolve(proxyPrivateKeyPath), 'utf8');
   const proxyPublic = fs.readFileSync(path.resolve(proxyPublicKeyPath), 'utf8');
 
-  const isPublic = (req) => publicPaths.some(p => {
-    if (p.method.toUpperCase() !== req.method.toUpperCase()) return false;
-    if (p.path.endsWith('*')) {
-      return req.path.startsWith(p.path.slice(0, -1));
-    }
-    return p.path === req.path;
-  });
+  const isPublic = (req) => {
+    // Extract pathname from req.url (remove query string)
+    const pathname = req.url.split('?')[0];
+
+    return publicPaths.some(p => {
+      if (p.method.toUpperCase() !== req.method.toUpperCase()) return false;
+      if (p.path.endsWith('*')) {
+        return pathname.startsWith(p.path.slice(0, -1));
+      }
+      return p.path === pathname;
+    });
+  };
 
   const verifyClientToken = (token) => jwt.verify(token, proxyPublic, { algorithms: ['RS256'] });
 

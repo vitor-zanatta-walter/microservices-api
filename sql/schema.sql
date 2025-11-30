@@ -1,3 +1,6 @@
+-- Schema completo do banco de dados
+-- Criação de todas as tabelas necessárias para o sistema de eventos
+
 CREATE TABLE IF NOT EXISTS `Users` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `cpf` VARCHAR(20) NULL UNIQUE,
