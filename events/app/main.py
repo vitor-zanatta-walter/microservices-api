@@ -28,7 +28,15 @@ def authenticate_request():
     if request.method == 'OPTIONS':
         return
         
-    public_endpoints = ['root', 'ping', 'health_check']
+    public_endpoints = [
+        'root', 
+        'ping', 
+        'health_check',
+        'events.list_events',      # GET /events/
+        'events.get_event',        # GET /events/<id>
+        'certificates.get_certificate',  # GET /certificates/<hash>
+        'certificates.verify_certificate'  # GET /certificates/<hash>/verify
+    ]
     if request.endpoint in public_endpoints:
         return
 
