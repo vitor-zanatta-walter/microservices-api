@@ -18,13 +18,19 @@ export default function createProxyAuthMiddleware({
     // Extract pathname from req.url (remove query string)
     const pathname = req.url.split('?')[0];
 
-    return publicPaths.some(p => {
+    console.log(`[AUTH DEBUG] Method: ${req.method}, Pathname: ${pathname}`);
+    console.log(`[AUTH DEBUG] Public paths:`, publicPaths);
+
+    const result = publicPaths.some(p => {
       if (p.method.toUpperCase() !== req.method.toUpperCase()) return false;
       if (p.path.endsWith('*')) {
         return pathname.startsWith(p.path.slice(0, -1));
       }
       return p.path === pathname;
     });
+
+    console.log(`[AUTH DEBUG] Is public? ${result}`);
+    return result;
   };
 
   const verifyClientToken = (token) => jwt.verify(token, proxyPublic, { algorithms: ['RS256'] });
