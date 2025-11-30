@@ -23,9 +23,14 @@ export default function createProxyAuthMiddleware({
 
     const result = publicPaths.some(p => {
       if (p.method.toUpperCase() !== req.method.toUpperCase()) return false;
+
       if (p.path.endsWith('*')) {
-        return pathname.startsWith(p.path.slice(0, -1));
+        // Remove the * and any trailing /
+        const basePath = p.path.slice(0, -1).replace(/\/$/, '');
+        // Match if pathname starts with basePath or basePath/
+        return pathname === basePath || pathname.startsWith(basePath + '/');
       }
+
       return p.path === pathname;
     });
 
