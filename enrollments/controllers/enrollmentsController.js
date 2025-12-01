@@ -1,5 +1,5 @@
 import Enrollment from '../models/Enrollment.js';
-import { getEvent } from '../utils/internalRequest.js';
+import { getEvent, getUserById } from '../utils/internalRequest.js';
 
 class EnrollmentsController {
 
@@ -105,11 +105,25 @@ class EnrollmentsController {
     }
 
     // Busca todas as inscrições de um evento
+    // Busca todas as inscrições de um evento
     static async getByEventId(req, res) {
         try {
             const { event_id } = req.params;
+            const token = req.headers.authorization?.replace("Bearer ", "");
+
             const enrollments = await Enrollment.getByEventId(event_id);
-            res.json(enrollments);
+
+            // Enrich enrollments with user data
+            const enrichedEnrollments = await Promise.all(enrollments.map(async (enrollment) => {
+                const user = await getUserById(enrollment.user_id, token);
+                return {
+                    ...enrollment,
+                    user_name: user ? user.name : null,
+                    user_email: user ? user.email : null
+                };
+            }));
+
+            res.json(enrichedEnrollments);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

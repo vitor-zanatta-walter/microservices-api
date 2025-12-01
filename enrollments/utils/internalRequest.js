@@ -62,6 +62,38 @@ export async function getUserByEmail(email, token) {
     }
 }
 
+export async function getUserById(userId, token) {
+    const serviceUrl = process.env.USER_SERVICE_URL;
+
+    if (!serviceUrl) {
+        console.warn('USER_SERVICE_URL not defined');
+        return null;
+    }
+
+    try {
+        const response = await fetch(`${serviceUrl}/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 404) {
+            return null;
+        }
+
+        if (!response.ok) {
+            throw new Error(`Service returned ${response.status}`);
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error('Error getting user by ID:', error.message);
+        return null; // Return null instead of throwing to avoid breaking the whole list
+    }
+}
+
 export async function createUser(userData) {
     const serviceUrl = process.env.USER_SERVICE_URL;
 
