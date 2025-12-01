@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS `Events` (
   `description` TEXT,
   `starts_at` TIMESTAMP NOT NULL,
   `ends_at` TIMESTAMP NOT NULL,
-  `location` VARCHAR(255)
+  `location` VARCHAR(255),
+  `finished` BOOLEAN NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS `Enrollments` (

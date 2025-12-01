@@ -85,12 +85,15 @@ def finish_event(event_id: int):
     ev = event_crud.get_event(db, event_id)
     if not ev:
         abort(404, description="Evento não encontrado")
+    
+    # 2. Marcar evento como finalizado
+    event_crud.update_event(db, event_id, {"finished": True})
         
-    # 2. Buscar token do header para repassar
+    # 3. Buscar token do header para repassar
     auth_header = request.headers.get("Authorization")
     token = extract_token_from_header(auth_header)
     
-    # 3. Buscar inscrições com presença
+    # 4. Buscar inscrições com presença
     try:
         attended_enrollments = EnrollmentService.get_attended_enrollments(event_id, token)
     except Exception as e:
