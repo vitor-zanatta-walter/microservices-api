@@ -104,7 +104,7 @@ class EnrollmentsController {
         }
     }
 
-    // Busca todas as inscrições de um evento
+
     // Busca todas as inscrições de um evento
     static async getByEventId(req, res) {
         try {

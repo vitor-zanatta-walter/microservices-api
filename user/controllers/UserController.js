@@ -74,7 +74,9 @@ export default class UserController {
             const selfId = req.user.id;
 
             // se for procurar outro usuário, verificar permissão
-            if ((searchId !== selfId) || !is_attendant) {
+            // Permitido se: (sou eu mesmo) OU (sou atendente)
+            // Proibido se: (não sou eu mesmo) E (não sou atendente)
+            if (searchId != selfId && !is_attendant) {
                 return res.status(403).json({ error: 'Permissão insuficiente' });
             }
 
